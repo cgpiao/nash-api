@@ -22,6 +22,7 @@ gem "http"
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 gem 'mime-types', require: 'mime/types/full'
+gem 'daemons'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
