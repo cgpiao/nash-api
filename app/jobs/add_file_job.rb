@@ -35,13 +35,13 @@ class AddFileJob < ApplicationJob
 
                   attachment.save!
                   user_attachment = UserAttachment.find_by user_id: user_id, attachment_id: attachment.id
-                  user = User.find user_id
                   if user_attachment.nil?
                      attachment.ref_count = attachment.ref_count + 1
                      attachment.save!
                      user_attachment = UserAttachment.new
                      user_attachment.user_id = user_id
                      user_attachment.attachment_id = attachment.id
+                     user = User.find user_id
                      user.file_amount = 0 if user.file_amount.nil?
                      user.disk_amount = 0 if user.disk_amount.nil?
                      user.file_amount = user.file_amount + attachment.file_size
@@ -57,8 +57,8 @@ class AddFileJob < ApplicationJob
                     custom_name: custom_name
                   }
                   user_attachment.save!
-                  user = Temp.find_by(key: uuid)
-                  user.update!(value: Temp::PINNED)
+                  temp = Temp.find_by(key: uuid)
+                  temp.update!(value: Temp::PINNED)
                end
             end
          end
