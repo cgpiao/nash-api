@@ -1,5 +1,6 @@
 ## DEPLOY
 ```shell
+#spring stop
 rm config/master.key
 rm config/credentials.yml.enc
 EDITOR="vim" bin/rails credentials:edit

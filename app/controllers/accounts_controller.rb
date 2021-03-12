@@ -2,18 +2,13 @@ class AccountsController < ApplicationController
    before_action :check_account_params, :only => :create
 
    def create
-      data = {a: "1", b: 1}
-      succeed data
-      return
       begin
          username = params[:username]
          password = params[:password]
 
          User.transaction do
             user = User.create!(username: username, password: password, password_confirmation: password)
-            puts user.id
             @token = UserToken.create!(user_id: user.id)
-            puts @token.valid?
          end
          succeed @token.auth_token
       rescue => e
