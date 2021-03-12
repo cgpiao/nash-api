@@ -38,7 +38,6 @@ class ApplicationController < ActionController::API
             render status: 401
             return
          end
-         puts @token.user_id
          @user = User.find(@token.user_id)
          unless @user
             render status: 401
