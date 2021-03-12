@@ -1,8 +1,8 @@
 class HashesController < ApplicationController
    def create
       url = "#{Rails.configuration.x.gateway}/#{params[:id]}"
-      response = HTTP.get url
       begin
+         response = HTTP.get url
          if response.code == 200
             uuid = SecureRandom.uuid
             Temp.create! key: uuid, value: Temp::PINNING
