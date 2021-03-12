@@ -48,7 +48,6 @@ class FilesController < ApplicationController
          end
       end
 
-      logger.info
       uuid = SecureRandom.uuid
       Temp.create! key: uuid, value: Temp::PINNING
       AddFileJob.perform_now params[:custom_name], @root_file, @user.id, uuid, @original_filename
