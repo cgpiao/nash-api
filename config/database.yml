@@ -52,5 +52,7 @@ test:
 production:
   <<: *default
   database: nash
-  username: <%= ENV['DATABASE_USERNAME'] %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  port: <%= ENV['DATABASE_PORT'] || '5432' %>
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
   password: <%= ENV['DATABASE_PASSWORD'] || '12345678' %>

@@ -28,7 +28,6 @@ module Api
       # Skip views, helpers and assets when generating a new resource.
       config.api_only = true
 
-      config.x.twilio.sid = 12345
       config.x.ipfs_host = ENV.fetch('IPFS_HOST', 'http://127.0.0.1:5001')
       config.x.temp_folder = ENV.fetch('TEMP_FOLDER', '/Users/piaocg/Workspace/nash/nash-temp')
       config.x.gateway = ENV.fetch('GATEWAY', 'https://ipfs.io/ipfs')
