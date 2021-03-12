@@ -25,7 +25,7 @@ class FilesController < ApplicationController
          query = query.where("user_attachment.unpinned_date at time zone 'utc' at time zone '#{@timezone}' <= ?", params[:unpin_end_date]+' 23:59:59')
       end
       select = %{
-         user_attachment.*, attachments.cid as cid, attachments.file_size as file_size
+         user_attachment.*, attachments.cid as cid, attachments.file_size as file_size, attachments.uuid as uuid
       }
       query = query.select(select)
       succeed query
