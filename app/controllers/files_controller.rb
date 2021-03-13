@@ -4,7 +4,6 @@ class FilesController < ApplicationController
       query = UserAttachment.joins('JOIN attachments on user_attachment.attachment_id = attachments.id')
                             .where('user_attachment.user_id = ?', @user.id)
       if params[:name]
-         puts params[:name]
          query = query.where('user_attachment.original_name like ?', "%#{params[:name]}%")
       end
       if params[:status] == 'Pinned'
@@ -36,13 +35,29 @@ class FilesController < ApplicationController
 
       params.each_pair do |k, f|
          if k =~ /^file_.*/
-            @original_filename = f.original_filename
-            target = temp_folder + '/' + SecureRandom.uuid
-            folder_name = File.dirname target
-            unless Dir.exists? folder_name
-               Dir.mkdir folder_name
+            path = Base64.decode64 k[5, k.length]
+            if path.index('/').nil?
+               @original_filename = f.original_filename
+            else
+               @original_filename = path[0, path.index('/')]
             end
-            File.rename f.path, target
+
+            target = temp_folder + '/' + SecureRandom.uuid
+            if path.index('/').nil?
+               File.rename f.path, target
+            else
+               target_path = target + '/' + path
+               folder_name = File.dirname target_path
+               folders = []
+               until Dir.exists? folder_name
+                  folders << folder_name
+                  folder_name = File.dirname folder_name
+               end
+               folders.reverse.each { |f| Dir.mkdir f }
+
+               File.rename f.path, target + '/' + path
+            end
+
             Regexp.new(temp_folder + '/([^/]*).*').match target
             @root_file = Regexp.last_match[1]
          end

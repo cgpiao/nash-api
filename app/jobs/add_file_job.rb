@@ -28,7 +28,6 @@ class AddFileJob < ApplicationJob
                   attachment.is_directory = false
                   attachment.file_size = File.size(source_file)
                   attachment.disk_size = File.stat(source_file).blocks * 512
-
                end
 
                Attachment.transaction do

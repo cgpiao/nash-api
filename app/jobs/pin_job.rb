@@ -6,7 +6,6 @@ class PinJob < ApplicationJob
       output = temp_folder + '/' + uuid
       begin
          url = "#{Rails.configuration.x.gateway}/#{cid}"
-         puts url
          response = HTTP.get url
          File.open(output,'wb') do |f|
             f.write response.body
