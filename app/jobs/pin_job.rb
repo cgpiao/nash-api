@@ -8,8 +8,11 @@ class PinJob < ApplicationJob
          url = "#{Rails.configuration.x.gateway}/#{cid}"
          puts url
          response = HTTP.get url
-         File.open(output,'wb') { |f| f.write response.body }
-         f = File.open output
+         File.open(output,'wb') do |f|
+            f.write response.body
+         end
+
+         # AddFileJob.perform_now params[:custom_name], @root_file, @user.id, uuid, @original_filename
          AddFileJob.perform_now custom_name, uuid, user_id, uuid, nil
       rescue => err
          failed_job = FailedJob.new
