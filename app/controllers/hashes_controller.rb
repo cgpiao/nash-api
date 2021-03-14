@@ -17,7 +17,7 @@ class HashesController < ApplicationController
    end
 
    def delete
-      UnpinJob.perform_later params[:id]
+      UnpinJob.perform_now params[:id]
       succeed
    end
 end
