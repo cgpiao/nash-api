@@ -7,9 +7,9 @@ class FilesController < ApplicationController
          query = query.where('user_attachment.original_name like ?', "%#{params[:name]}%")
       end
       if params[:status] == 'Pinned'
-         query = query.where('user_attachment.pinned_dae is not null')
+         query = query.where('user_attachment.pinned_date is not null')
       elsif params[:status] == 'Unpinned'
-         query = query.where('user_attachment.pinned_dae is null')
+         query = query.where('user_attachment.pinned_date is null')
       end
       if params[:start_date]
          query = query.where("user_attachment.pinned_date at time zone 'utc' at time zone '#{@timezone}' >= ?", params[:start_date]+' 00:00:00')
