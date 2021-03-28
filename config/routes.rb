@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
    scope "/v1" do
-      post 'accounts', to: 'accounts#create', as: 'accounts_create'
+      resources :accounts, only: [:create]
       post 'login', to: 'accounts#login', as: 'login'
       delete 'logout', to: 'accounts#logout', as: 'logout'
       resources :files, only: [:create, :index, :update, :show]
