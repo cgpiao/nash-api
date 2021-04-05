@@ -26,6 +26,7 @@ class ApplicationController < ActionController::API
       prefix = '/v1'
       exclude_paths = [
          prefix + '/login',
+         prefix + '/stripe/hooks',
          prefix + '/accounts',
       ]
       @offset = request.headers['offset']

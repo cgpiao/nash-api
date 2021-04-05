@@ -12,6 +12,9 @@ class UnpinJob < ApplicationJob
             user_attachment.pinned_date = nil
             user_attachment.unpinned_date = Time.now()
             user_attachment.save!
+            user.file_amount = user.file_amount - attachment.file_size
+            user.disk_amount = user.disk_amount - attachment.disk_size
+            user.save!
             attachment.ref_count = attachment.ref_count - 1
             attachment.save!
          end

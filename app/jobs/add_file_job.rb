@@ -4,6 +4,7 @@ class AddFileJob < ApplicationJob
    def perform(custom_name, root_file, user_id, uuid, original_name)
       temp_folder = Rails.configuration.x.temp_folder
       source_file = "#{temp_folder}/#{root_file}"
+      user = User.find user_id
       begin
          if File.directory? source_file
             @response = `ipfs add -r #{source_file.gsub(/ /, "\ ")}`
@@ -31,6 +32,7 @@ class AddFileJob < ApplicationJob
                end
 
                Attachment.transaction do
+
                   attachment.save!
                   user_attachment = UserAttachment.find_by user_id: user_id, attachment_id: attachment.id
                   if user_attachment.nil?
@@ -39,7 +41,6 @@ class AddFileJob < ApplicationJob
                      user_attachment = UserAttachment.new
                      user_attachment.user_id = user_id
                      user_attachment.attachment_id = attachment.id
-                     user = User.find user_id
                      user.file_amount = 0 if user.file_amount.nil?
                      user.disk_amount = 0 if user.disk_amount.nil?
                      user.file_amount = user.file_amount + attachment.file_size
@@ -52,7 +53,7 @@ class AddFileJob < ApplicationJob
                   user_attachment.added_date = Time.now
                   user_attachment.pinned_date = Time.now
                   user_attachment.meta = {
-                    custom_name: custom_name
+                     custom_name: custom_name
                   }
                   user_attachment.save!
                   temp = Temp.find_by(key: uuid)
@@ -64,7 +65,7 @@ class AddFileJob < ApplicationJob
       rescue => err
          failed_job = FailedJob.new
          failed_job.name = 'AddFileJob'
-         failed_job.arguments = {custom_name: custom_name, root_file: root_file, user_id: user_id, uuid: uuid}
+         failed_job.arguments = { custom_name: custom_name, root_file: root_file, user_id: user_id, uuid: uuid }
          failed_job.reason = err.message
          failed_job.save!
       end

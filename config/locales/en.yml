@@ -32,9 +32,7 @@
 # Domain
 #    1 Account
 #    2 Auth
-#    3 Sticky
-#    4 Task
-#    5 Taxonomy
+#    3 File
 
 en:
    hello: "Hello world"
@@ -42,4 +40,5 @@ en:
    msg_1_2: "username must be at least 5 characters"
    msg_1_3: "password must be at least 6 characters"
    msg_2_1: "username or password is incorrect"
+   msg_3_1: "Error, not enough storage"
 

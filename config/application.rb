@@ -34,5 +34,7 @@ module Api
       config.x.temp_folder = ENV.fetch('TEMP_FOLDER', '/Users/piaocg/Workspace/nash/nash-temp')
       config.x.gateway = ENV.fetch('GATEWAY', 'https://ipfs.io/ipfs')
       config.x.hook_ops_error = ENV.fetch('HOOK_OPS_ERROR', 'https://chat.googleapis.com/v1/spaces/AAAA7hmt0E0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=Xxu0uleVutbJMdLZqwFqn640vB1gBhyAofEAYO7LrAw%3D')
+      config.x.stripe_client_secret = ENV.fetch('STRIPE_CLIENT_SECRET', 'sk_test_51IMkwGCJyYRpjym4QPRx6KypnfCYeqqqrKGlSTrUCj2RGCnQzEYOVpSiDvMxba9d7r1mIewErX2p73MOYinXef0H00yNKSKTYi')
+      config.x.stripe_api_key = ENV.fetch('STRIPE_API_KEY', 'pk_test_51IMkwGCJyYRpjym40xQWNXEr3Axze0PJ2THfh4QXgqPk4SmhL4msxxueWHlPTU4aW0Uq0sMPNuARdjAq7ayiLRUb00WTuTtbgD')
    end
 end

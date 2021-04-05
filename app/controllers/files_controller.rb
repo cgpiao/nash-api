@@ -62,7 +62,16 @@ class FilesController < ApplicationController
             @root_file = Regexp.last_match[1]
          end
       end
-
+      root_absolute_path = "#{temp_folder}/#{@root_file}"
+      if File.directory? root_absolute_path
+         @file_size = Dir[root_absolute_path + '/**/*'].select { |f| File.file?(f) }.sum { |f| File.size(f) }
+      else
+         @file_size = File.size(root_absolute_path)
+      end
+      if @user.remain_storage < @file_size
+         fail 1, message: (I18n.t 'msg_3_1')
+         return
+      end
       uuid = SecureRandom.uuid
       Temp.create! key: uuid, value: Temp::PINNING
       AddFileJob.perform_later params[:custom_name], @root_file, @user.id, uuid, @original_filename
@@ -70,7 +79,7 @@ class FilesController < ApplicationController
    end
 
    def show
-      succeed Temp.find_by key: params[:id], value: Temp::PINNED
+      succeed Temp.find_by key: params[:id]
    end
 
    def unpin

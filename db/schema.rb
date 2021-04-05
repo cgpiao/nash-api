@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_09_110542) do
+ActiveRecord::Schema.define(version: 2021_04_05_114900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -51,11 +51,37 @@ ActiveRecord::Schema.define(version: 2021_03_09_110542) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "storage_histories", force: :cascade do |t|
+    t.uuid "uuid"
+    t.bigint "user_id", null: false
+    t.string "secret"
+    t.integer "storage"
+    t.integer "months"
+    t.integer "amount"
+    t.string "currency", default: "usd"
+    t.string "action", default: "N"
+    t.boolean "paid", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_storage_histories_on_user_id"
+  end
+
+  create_table "storages", force: :cascade do |t|
+    t.uuid "uuid"
+    t.bigint "user_id", null: false
+    t.integer "storage"
+    t.datetime "stop_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_storages_on_user_id"
+  end
+
   create_table "temps", force: :cascade do |t|
     t.string "key"
     t.text "value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "note"
     t.index ["key"], name: "index_temps_on_key", unique: true
   end
 
@@ -89,6 +115,8 @@ ActiveRecord::Schema.define(version: 2021_03_09_110542) do
     t.bigint "disk_amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "capacity", default: 0
+    t.datetime "expired_at"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 

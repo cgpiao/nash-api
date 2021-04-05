@@ -1,6 +1,14 @@
 class AccountsController < ApplicationController
    before_action :check_account_params, :only => :create
 
+   def show
+      result = {
+         file_amount: @user.file_amount,
+         plan: @user.storage
+      }
+      succeed result
+   end
+
    def create
       begin
          username = params[:username]
