@@ -17,6 +17,7 @@ class StripeController < ApplicationController
       end
 
       payment_intent = event.data.object
+      p "hooks: #{event.type}"
       case event.type
          #  payment_intent.succeeded, charge.succeeded
       when 'payment_intent.succeeded'
