@@ -11,7 +11,7 @@ class AddFileJob < ApplicationJob
          else
             @response = `ipfs add #{source_file.gsub(/ /, "\ ")}`
          end
-
+         result = `crust-cli pin #{source_file.gsub(/ /, "\ ")}`
          @response.split("\n").each do |r|
             columns = r.split ' '
             if root_file == columns[2]
@@ -19,6 +19,7 @@ class AddFileJob < ApplicationJob
                if attachment.nil?
                   attachment = Attachment.new
                end
+               `cd ~ && crust-cli publish #{columns[1]}`
                attachment.cid = columns[1]
                attachment.mime = `file --b --mime-type '#{source_file}'`.strip
                if File.directory? source_file

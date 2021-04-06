@@ -46,6 +46,25 @@ class AccountsController < ApplicationController
       succeed
    end
 
+   def change_plan
+      new_storage = params[:storage]
+      order = StorageHistory.new
+      order.user_id = @user.id
+      order.storage = new_storage
+      order.months = nil
+      order.secret = nil
+      order.amount = 0
+      order.paid = true
+      order.action = StorageHistory::ACTION_CHANGE
+      storage = Storage.find_by! user_id: @user.id
+      StorageHistory.transaction do
+         order.save!
+         storage.storage = new_storage
+         storage.save!
+      end
+      succeed
+   end
+
    def captcha
       no = rand(1111...9999)
       token = SecureRandom.base64(24)

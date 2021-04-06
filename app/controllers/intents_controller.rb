@@ -37,4 +37,10 @@ class IntentsController < ApplicationController
       order.save!
       succeed(secret)
    end
+
+   def show
+      order = StorageHistory.find_by!(secret: params[:id])
+                            .select(:payed, :note)
+      succeed order
+   end
 end

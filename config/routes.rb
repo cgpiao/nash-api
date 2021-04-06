@@ -2,7 +2,7 @@ Rails.application.routes.draw do
    scope "/v1" do
       resources :accounts, only: [:create]
       resources :orders, only: [:index]
-      resources :intents, only: [:create]
+      resources :intents, only: [:create, :show]
 
       namespace :stripe do
          resources :customers, only: [:create]
@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       end
       post 'stripe/hooks', to: 'stripe#hooks'
       get 'account', to: 'accounts#show', as: 'account'
+      post 'account/change-plan', to: 'accounts#change_plan'
       post 'login', to: 'accounts#login', as: 'login'
       delete 'logout', to: 'accounts#logout', as: 'logout'
       resources :files, only: [:create, :index, :update, :show]
