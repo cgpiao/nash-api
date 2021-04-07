@@ -13,6 +13,7 @@ class AddFileJob < ApplicationJob
          end
          result1 = `crust-cli pin #{source_file.gsub(/ /, "\ ")}`
          logger.info("==== result1: #{result1}")
+         p("==== result1: #{result1}")
          @response.split("\n").each do |r|
             columns = r.split ' '
             if root_file == columns[2]
@@ -22,6 +23,7 @@ class AddFileJob < ApplicationJob
                end
                result2 = `cd ~ && crust-cli publish #{columns[1]}`
                logger.info("==== result2: #{result2}")
+               p("==== result2: #{result2}")
                attachment.cid = columns[1]
                attachment.mime = `file --b --mime-type '#{source_file}'`.strip
                if File.directory? source_file
