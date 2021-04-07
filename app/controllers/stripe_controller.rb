@@ -43,5 +43,6 @@ class StripeController < ApplicationController
       else
          puts "Unhandled event type: #{event.type}"
       end
+      succeed
    end
 end

@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-   STORAGE_FREE_TIER = 0
+   STORAGE_FREE_TIER = 1
    has_secure_password
    has_many :attachments, -> {select(:uuid, :original_name, :mime, :file_size, :disk_size,
                                      :is_directory, :meta, :cid, :created_at, :pinned_date, :unpinned_date,

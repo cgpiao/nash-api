@@ -3,19 +3,12 @@ class IntentsController < ApplicationController
 
    def create
       Stripe.api_key = Rails.configuration.x.stripe_client_secret
-
       storage = params[:storage]
       months = params[:months]
       payment_type = params[:payment_type] || 'card'
       my_storage = Storage.find_by user_id: @user.id
 
-      if payment_type == 'card'
-         @currency = 'usd'
-      elsif payment_type == 'wechat'
-         @currency = 'jpy'
-      else
-         @currency = 'cny'
-      end
+      @currency = 'usd'
       if !my_storage.nil? && my_storage.storage != storage
          increased_amount = UNIT_PRICE * storage * months
          current_storage = @user.storage.storage
@@ -31,7 +24,6 @@ class IntentsController < ApplicationController
       elsif @currency == 'jpy'
          @amount = (@amount/100).to_i
       end
-      p "@amount2 #{@amount}"
 
       payment_intent = Stripe::PaymentIntent.create(
          payment_method_types: [payment_type],
