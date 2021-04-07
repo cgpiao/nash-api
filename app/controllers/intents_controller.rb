@@ -9,6 +9,9 @@ class IntentsController < ApplicationController
       my_storage = Storage.find_by user_id: @user.id
 
       @currency = 'usd'
+      if payment_type == 'alipay'
+         @currency = 'cny'
+      end
       if !my_storage.nil? && my_storage.storage != storage
          increased_amount = UNIT_PRICE * storage * months
          current_storage = @user.storage.storage
@@ -25,11 +28,10 @@ class IntentsController < ApplicationController
          @amount = (@amount/100).to_i
       end
 
-      payment_intent = Stripe::PaymentIntent.create(
+      payment_intent = Stripe::PaymentIntent.create({
          payment_method_types: [payment_type],
          amount: @amount.to_i,
-         currency: @currency
-      )
+         currency: @currency })
       secret = payment_intent['client_secret']
       order = StorageHistory.new
       order.user_id = @user.id
