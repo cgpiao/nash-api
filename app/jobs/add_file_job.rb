@@ -2,6 +2,7 @@ class AddFileJob < ApplicationJob
    queue_as :default
 
    def perform(custom_name, root_file, user_id, uuid, original_name)
+      logger.info("==== #{self.class.name} start")
       temp_folder = Rails.configuration.x.temp_folder
       source_file = "#{temp_folder}/#{root_file}"
       user = User.find user_id
@@ -11,17 +12,20 @@ class AddFileJob < ApplicationJob
          else
             @response = `ipfs add #{source_file.gsub(/ /, "\ ")}`
          end
-         result1 = `crust-cli pin #{source_file.gsub(/ /, "\ ")}`
-         logger.info("==== result1: #{result1}")
+         # result1 = %x[crust-cli pin #{source_file.gsub(/ /, "\ ")}]
+         # logger.info("==== result1: #{result1}")
          @response.split("\n").each do |r|
             columns = r.split ' '
+            logger.info("==== columns: #{columns}")
+            logger.info("==== column[2]: #{columns[2]}")
+            logger.info("==== root_file: #{root_file}")
             if root_file == columns[2]
                attachment = Attachment.find_by cid: columns[1]
                if attachment.nil?
                   attachment = Attachment.new
                end
-               result2 = `cd /root && crust-cli publish #{columns[1]}`
-               logger.info("==== result2: #{result2}")
+               # result2 = `cd /root && crust-cli publish #{columns[1]}`
+               # logger.info("==== result2: #{result2}")
                attachment.cid = columns[1]
                attachment.mime = `file --b --mime-type '#{source_file}'`.strip
                if File.directory? source_file
@@ -61,10 +65,11 @@ class AddFileJob < ApplicationJob
                   user_attachment.save!
                   temp = Temp.find_by(key: uuid)
                   temp.update!(value: Temp::PINNED)
+                  PublishCrustJob.perform_later user_id, attachment.cid, source_file
                end
             end
          end
-         FileUtils.rm_r source_file
+         logger.info("==== #{self.class.name} end")
       rescue => err
          failed_job = FailedJob.new
          failed_job.name = 'AddFileJob'

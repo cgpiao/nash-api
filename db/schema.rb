@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_050255) do
+ActiveRecord::Schema.define(version: 2021_04_09_064954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_050255) do
     t.datetime "added_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "crust_status", default: 0
     t.index ["attachment_id"], name: "index_user_attachment_on_attachment_id"
     t.index ["user_id"], name: "index_user_attachment_on_user_id"
   end

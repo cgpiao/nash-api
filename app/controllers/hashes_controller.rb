@@ -6,7 +6,7 @@ class HashesController < ApplicationController
          if response.code == 200
             uuid = SecureRandom.uuid
             Temp.create! key: uuid, value: Temp::PINNING
-            PinJob.perform_later params[:id], @user.id, params[:custom_name], uuid
+            PinJob.perform_now params[:id], @user.id, params[:custom_name], uuid
             succeed uuid
          else
             fail
